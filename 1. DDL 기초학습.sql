@@ -87,9 +87,50 @@ DROP TABLE goods; -- 복구 불가 // 테이블 자체를 날려버림
 DELETE FROM goods
 WHERE price > 1000
 ;
-
-
-
-    
+   
     
 SELECT * FROM goods;
+
+--SELECT 기본
+SELECT
+    certi_cd, certi_nm, issue_insti_nm
+FROM tb_certi;
+
+SELECT -- 가져올 데이터들의 순서는 상관 X 다만 순서대로 나타난다.
+    certi_nm, certi_cd, issue_insti_nm
+FROM tb_certi;
+
+SELECT -- 보고싶은 데이터만 가져올 수 있음
+    certi_nm, issue_insti_nm
+FROM tb_certi;
+
+SELECT DISTINCT -- 중복제거 SELECT옆에 아무것도 안쓰면 기본적으로 ALL이 쓰여진다.
+    issue_insti_nm
+FROM tb_certi;
+
+SELECT -- *을 입력시 모든 컬럼 조회
+    *
+FROM tb_certi;
+
+
+-- 열 별칭 부여
+SELECT
+    emp_nm AS "사원명",
+    addr AS "주소"
+FROM tb_emp
+;
+
+SELECT -- AS 생략 가능, ""도 생략 가능
+    emp_nm 사원명,
+    addr "거주지 주소" -- ""안에 띄워쓰기가 있다면 생략 불가능
+FROM tb_emp
+;
+
+-- 문자열 결합하기
+SELECT -- ||을 사용하면 문자열 결합 가능
+    '자격증: ' || certi_nm AS "자격증 정보"
+FROM tb_certi;
+
+SELECT
+    certi_nm || ' (' || issue_insti_nm || ')' AS "자격증 정보"
+FROM tb_certi;

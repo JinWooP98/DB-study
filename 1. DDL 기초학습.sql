@@ -1,51 +1,95 @@
-select * from tb_emp;
-
--- 테이블 생성 (DDL: 데이터 정의어
--- 학생들의 성적정보를 저장할 데이터 구조
--- 관례적으로 대문자로 키워드 설정
-CREATE TABLE tbl_score (
-    name VARCHAR2(4)NOT NULL,
-    kor NUMBER(3) NOT NULL CHECK(kor >= 0 AND kor <= 100),
-    eng NUMBER(3) NOT NULL CHECK(eng >= 0 AND eng <= 100),
-    math NUMBER(3) NOT NULL CHECK(math >= 0 AND math <= 100),
-    total NUMBER(3)Null, -- 널값 허용--
-    average NUMBER(5, 2),
-    grade CHAR(1),
-    stu_num NUMBER(6) PRIMARY KEY
+CREATE TABLE goods (
+    id NUMBER(6) PRIMARY KEY,
+    goods_name VARCHAR2(10) NOT NULL, -- 한글을 1글자당 2~3바이트 이므로 데이터 크기를 넉넉히 설정해야한다.
+    price NUMBER(10) DEFAULT 1000, -- DEFAULT 1000 = 이 값을 넣지 않았을 때 기본값을 1000으로 설정한다.
+    reg_date DATE
 );
 
-
-SELECT * FROM tbl_score;
-
--- 컬럼 추가하기
-ALTER TABLE tbl_score
-ADD (sci NUMBER(3) NOT NULL);
-
--- 컬럼 제거하기
-ALTER TABLE tbl_score
-DROP COLUMN SCI;
-
--- DROP : 테이블 제거, 강련한 제거
--- 테이블 복사 (CTAS)
-CREATE TABLE tb_emp_copy
-AS SELECT * FROM tb_emp;
-
-DROP TABLE tb_emp_copy;
-
-select * from tb_emp_copy;
-
--- TRUNCATE : 휴지통 비우기 - 구조는 남기고 안에 데이터만 삭제하여
--- 테이블이 생성된 초기상태로 돌아간다.
-
-TRUNCATE TABLE tb_emp_copy;
-
--- ALTER문으로 제약조건 추가하기
--- stu_num에 깜빡하고 primary key를 안걸었다.
-ALTER TABLE tbl_score
-ADD CONSTRAINT pk_tbl_score
-PRIMARY KEY (stu_num);
-
--- pk를 제거
-ALTER TABLE tbl_score
-DROP CONSTRAINT pk_tbl_score;
+-- INSERT
+INSERT INTO goods
+    (id, goods_name, price, reg_date)
+VALUES
+    (1, '선풍기', 120000, SYSDATE);
     
+INSERT INTO goods
+    (id, goods_name, price, reg_date)
+VALUES
+    (2, '세탁기', 2000000, SYSDATE);
+    
+INSERT INTO goods
+    (id, goods_name, reg_date)
+VALUES
+    (3, '달고나', SYSDATE);
+    
+INSERT INTO goods
+    (id, goods_name)
+VALUES
+    (4, '계란');
+    
+INSERT INTO goods
+    (goods_name, id, reg_date, price)
+VALUES
+    ('점퍼', 5, SYSDATE, '49000'); -- 암묵적 형 변환 가능
+    
+INSERT INTO goods
+    
+VALUES
+    (6, '냉장고', '1000000', SYSDATE);
+    
+    -- 컬럼명 생략시 테이블구조 순서대로 자동 기입
+    
+UPDATE goods
+SET goods_name = '에어컨'
+-- 뭘 수정할지 지정하지 않으면... 전부 다 바뀜
+WHERE id = 1 -- 꼭 타겟팅을 해주기!!
+;
+
+UPDATE goods
+SET price = 9999;
+-- 업데이트는 롤백이 가능.. 추후에 알아보자
+
+UPDATE goods
+SET id = 11
+WHERE id = 4
+;
+
+UPDATE goods
+SET id = 4
+WHERE id = 11
+;
+
+UPDATE goods
+SET goods_name = null
+WHERE id = 4
+;
+
+UPDATE goods
+SET price = null
+WHERE id = 4
+;
+
+UPDATE goods
+SET goods_name = '청바지',
+    price = 299000
+WHERE id = 3;
+
+-- DELETE
+
+DELETE FROM goods
+WHERE ID = 4;
+
+-- 조건 없이 DELETE하면 전체삭제됨
+-- 다만 이 문법은 복구가 가능함.
+DELETE FROM goods;
+TRUNCATE TABLE goods; -- 복구 불가 // DDL  이는 테이블 생성 전 단계로 이동하는 것
+DROP TABLE goods; -- 복구 불가 // 테이블 자체를 날려버림
+
+DELETE FROM goods
+WHERE price > 1000
+;
+
+
+
+    
+    
+SELECT * FROM goods;

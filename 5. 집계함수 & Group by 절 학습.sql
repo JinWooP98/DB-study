@@ -251,3 +251,8 @@ HAVING AVG(pay_amt) >= 4500000
 ORDER BY SUM(pay_amt) DESC
 ;
 
+SELECT
+    emp_nm,
+    direct_manager_emp_no
+FROM tb_emp
+ORDER BY direct_manager_emp_no DESC;
